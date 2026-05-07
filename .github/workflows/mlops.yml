@@ -60,6 +60,20 @@ jobs:
       - name: Install dependencies
         run: pip install -r requirements.txt
 
+      - name: Debug GCP auth
+        run: |
+          ls -l /tmp/sa-key.json
+
+          python - <<'EOF'
+          import json
+
+          with open("/tmp/sa-key.json") as f:
+              data = json.load(f)
+
+          print("PROJECT:", data["project_id"])
+          print("CLIENT:", data["client_email"])
+          EOF
+
       - name: Authenticate to Cloud Storage
         # TODO 2: Ghi noi dung credentials ra file tam va set bien moi truong xac thuc.
         # GCP:   echo '${{ secrets.CLOUD_CREDENTIALS }}' > /tmp/sa-key.json
@@ -70,7 +84,6 @@ jobs:
         run: |
           echo '${{ secrets.CLOUD_CREDENTIALS }}' > /tmp/sa-key.json
           echo "GOOGLE_APPLICATION_CREDENTIALS=/tmp/sa-key.json" >> $GITHUB_ENV
-          echo "CLOUD_BUCKET=${{ secrets.CLOUD_BUCKET }}" >> $GITHUB_ENV
 
       - name: Pull data with DVC
         # TODO 3: Pull cac file du lieu can thiet tu cloud storage bang lenh dvc pull.
