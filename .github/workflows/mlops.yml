@@ -71,6 +71,10 @@ jobs:
           echo '${{ secrets.CLOUD_CREDENTIALS }}' > /tmp/sa-key.json
           echo "GOOGLE_APPLICATION_CREDENTIALS=/tmp/sa-key.json" >> $GITHUB_ENV
 
+      - name: Set env variables
+        run: |
+          echo "CLOUD_BUCKET=${{ secrets.CLOUD_BUCKET }}" >> $GITHUB_ENV
+
       - name: Debug GCP auth
         run: |
           ls -l /tmp/sa-key.json
